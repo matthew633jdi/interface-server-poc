@@ -23,5 +23,9 @@ public class Hl7Properties {
         private String exchange;
         private String queue;
         private String routingKey;
+
+        private String dlqName;
+        private String dlxName;
+        private String dlqRoutingKey;
     }
 }

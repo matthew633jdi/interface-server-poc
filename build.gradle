@@ -26,6 +26,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'	// Instant 처리용
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	// HAPI HL7 (v2.x 기준 최신 안정화 버전)
 	// hapi-base는 핵심 엔진, structures는 HL7 메시지 버전별 구조체입니다.
