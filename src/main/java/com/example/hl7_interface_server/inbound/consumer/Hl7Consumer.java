@@ -2,8 +2,7 @@ package com.example.hl7_interface_server.inbound.consumer;
 
 import ca.uhn.hl7v2.HL7Exception;
 import com.example.hl7_interface_server.inbound.dto.Hl7MessageEnvelope;
-import com.example.hl7_interface_server.inbound.dto.Hl7ObservationDto;
-import com.example.hl7_interface_server.inbound.service.Hl7ParserService;
+import com.example.hl7_interface_server.inbound.service.Hl7InboundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Hl7Consumer {
 
-    private final Hl7ParserService parserService;
+    private final Hl7InboundService inboundService;
 
     @RabbitListener(queues = "${hl7.rabbitmq.queue}")
     public void consumeHl7Message(Hl7MessageEnvelope envelope) throws HL7Exception {
@@ -24,10 +23,10 @@ public class Hl7Consumer {
 
         try {
             log.info("메시지 수신 - 수신시각: {}", envelope.receivedAt());
-            // 비즈니스 로직
-            Hl7ObservationDto dto = parserService.parseOruMessage(envelope.rawMessage());
 
-            log.info("처리 성공: {}", dto.messageControlId());
+            inboundService.processHl7Message(envelope.rawMessage());
+
+            log.info("처리 성공: {}", envelope.messageId());
         } catch (Exception e) {
             log.error("메시지 처리 실패: {}. (Spring Retry가 재시도를 수행합니다)", e.getMessage());
 
